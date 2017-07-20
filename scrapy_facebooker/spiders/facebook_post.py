@@ -6,7 +6,7 @@ from collections import OrderedDict
 from scrapy_facebooker.faceblib.faceblib import get_real_external_link
 from html import unescape
 from scrapy_facebooker.items import FacebookPost
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urlencode, urljoin, unquote
 
 
 class FacebookPhotoSpider(scrapy.Spider):
@@ -39,27 +39,49 @@ class FacebookPhotoSpider(scrapy.Spider):
             return search.group(1)
 
         self.fb_page_id = get_fb_page_id()
+
+        # Default cursor to fetch early Facebook posts
         cursor = ('{"timeline_cursor":"timeline_unit:1:0:04611686018427387904'
                   ':09223372036854775803:04611686018427387904",'
                   '"timeline_section_cursor":{},"has_next_page":true}')
 
-        post_url = 'https://m.facebook.com/pages_reaction_units/more'
-        query_str = urlencode(OrderedDict(page_id=self.fb_page_id,
-                                          cursor=cursor,
-                                          surface='mobile_page_posts',
-                                          unit_count=9999999))
-
-        return scrapy.Request('{post_url}/?{query}'.format(post_url=post_url,
-                                                           query=query_str),
+        return scrapy.Request(self.create_fb_post_ajax_url(self.fb_page_id,
+                                                           cursor),
                               callback=self._parse_fb_story_links)
 
     def _parse_fb_story_links(self, response):
+        def get_next_cursor():
+            html_resp_unicode_decoded = str(
+                response.body.decode('unicode_escape'))
+            # Search for next cursor
+            cursor_regex = re.compile('cursor=(.+)&surface')
+            search_result = re.search(cursor_regex, html_resp_unicode_decoded)
+
+            if search_result:
+                next_cursor = unquote(
+                    bytes(search_result.group(1), 'utf-8').decode(
+                        'unicode_escape'))
+                return next_cursor
+            raise Exception('next_cursor not found, please report this issue '
+                            'to our GitHub issue tracker.')
+
         post_links = set(re.findall(
                         r'(\/story\.php\?story_fbid=\d+(?:&|&amp;)id=\d+)',
                         unescape(str(response.body.decode('utf-8')))))
         for post_link in post_links:
             yield scrapy.Request(urljoin('https://m.facebook.com', post_link),
                                  callback=self._parse_post)
+
+        next_cursor = get_next_cursor()
+
+        if re.search(next_cursor, response.url):
+            # If current url contains `next_cursor`,
+            # it means that this is the last cursor.
+            yield
+        else:
+            yield scrapy.Request(self.create_fb_post_ajax_url(self.fb_page_id,
+                                                              next_cursor),
+                                 callback=self._parse_fb_story_links)
 
     def _parse_post(self, response):
         html = str(response.body)
@@ -112,3 +134,26 @@ class FacebookPhotoSpider(scrapy.Spider):
         fpost['shares_number'] = get_number_of_shares()
 
         return fpost
+
+    @staticmethod
+    def create_fb_post_ajax_url(fb_page_id, cursor,
+                                surface='mobile_page_posts',
+                                unit_count=9999999):
+        """
+        Create a facebook post ajax url
+
+        :param fb_page_id:  Facebook page id of the facebook page.
+        :surface:           Default to 'mobile_page_posts' which means
+                            it will fetch the mobile facebook page post ajax.
+                            To fetch the web version, use `www_page_posts`.
+        :unit_count:        An integer, default to 9999999. This number used
+                            to tell how many posts will be fetched.
+        :return:            An facebook post ajax url.
+        """
+        post_url = 'https://m.facebook.com/pages_reaction_units/more'
+        query_str = urlencode(OrderedDict(page_id=fb_page_id,
+                                          cursor=cursor,
+                                          surface='mobile_page_posts',
+                                          unit_count=unit_count))
+
+        return '{post_url}/?{query}'.format(post_url=post_url, query=query_str)
