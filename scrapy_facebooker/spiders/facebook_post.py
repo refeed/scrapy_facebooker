@@ -3,22 +3,11 @@ import scrapy
 
 from bs4 import BeautifulSoup
 from collections import OrderedDict
+from scrapy_facebooker.faceblib.faceblib import (get_real_external_link,
+                                                 get_facebook_page_id)
 from html import unescape
 from scrapy_facebooker.items import FacebookPost
-from urllib.parse import urlencode, urljoin, urlparse, parse_qs
-
-
-def get_real_external_link(fb_encoded_link):
-    """
-    Get real external link from Facebook encoded link.
-
-    :param fb_encoded_link: Facebook encoded link, usually starts with
-                            "lm.facebook.com/l.php..."
-    :return:                Real link of Facebook's encoded link.
-    """
-    parsed = urlparse(fb_encoded_link)
-    real_link = parse_qs(parsed.query)['u']
-    return real_link
+from urllib.parse import urlencode, urljoin
 
 
 class FacebookPhotoSpider(scrapy.Spider):
@@ -35,6 +24,8 @@ class FacebookPhotoSpider(scrapy.Spider):
         if not self.target_username:
             raise Exception('`target_username` argument must be filled')
 
+        self.fb_page_id = get_facebook_page_id(self.target_username)
+
     def parse(self, response):
         # Get into target's page
         return scrapy.Request(
@@ -45,18 +36,12 @@ class FacebookPhotoSpider(scrapy.Spider):
 
     def _get_facebook_posts_ajax(self, response):
         # Get Facebook posts ajax
-        def get_fb_page_id():
-            p = re.compile(r'page_id=(\d*)')
-            search = re.search(p, str(response.body))
-            return search.group(1)
-
-        fb_page_id = get_fb_page_id()
         cursor = ('{"timeline_cursor":"timeline_unit:1:0:04611686018427387904'
                   ':09223372036854775803:04611686018427387904",'
                   '"timeline_section_cursor":{},"has_next_page":true}')
 
         post_url = 'https://m.facebook.com/pages_reaction_units/more'
-        query_str = urlencode(OrderedDict(page_id=fb_page_id,
+        query_str = urlencode(OrderedDict(page_id=self.fb_page_id,
                                           cursor=cursor,
                                           surface='mobile_page_posts',
                                           unit_count=9999999))
