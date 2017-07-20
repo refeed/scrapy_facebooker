@@ -132,6 +132,7 @@ class FacebookPhotoSpider(scrapy.Spider):
         fpost['content'] = get_post_text()
         fpost['page_title'] = get_page_title_from_post()
         fpost['shares_number'] = get_number_of_shares()
+        fpost['url'] = response.url
 
         return fpost
 

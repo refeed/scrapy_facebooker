@@ -16,3 +16,4 @@ class FacebookPost(scrapy.Item):
     content = scrapy.Field()
     date = scrapy.Field()
     shares_number = scrapy.Field()
+    url = scrapy.Field()
