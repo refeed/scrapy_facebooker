@@ -3,8 +3,7 @@ import scrapy
 
 from bs4 import BeautifulSoup
 from collections import OrderedDict
-from scrapy_facebooker.faceblib.faceblib import (get_real_external_link,
-                                                 get_facebook_page_id)
+from scrapy_facebooker.faceblib.faceblib import get_real_external_link
 from html import unescape
 from scrapy_facebooker.items import FacebookPost
 from urllib.parse import urlencode, urljoin
@@ -24,8 +23,6 @@ class FacebookPhotoSpider(scrapy.Spider):
         if not self.target_username:
             raise Exception('`target_username` argument must be filled')
 
-        self.fb_page_id = get_facebook_page_id(self.target_username)
-
     def parse(self, response):
         # Get into target's page
         return scrapy.Request(
@@ -36,6 +33,12 @@ class FacebookPhotoSpider(scrapy.Spider):
 
     def _get_facebook_posts_ajax(self, response):
         # Get Facebook posts ajax
+        def get_fb_page_id():
+            p = re.compile(r'page_id=(\d*)')
+            search = re.search(p, str(response.body))
+            return search.group(1)
+
+        self.fb_page_id = get_fb_page_id()
         cursor = ('{"timeline_cursor":"timeline_unit:1:0:04611686018427387904'
                   ':09223372036854775803:04611686018427387904",'
                   '"timeline_section_cursor":{},"has_next_page":true}')
