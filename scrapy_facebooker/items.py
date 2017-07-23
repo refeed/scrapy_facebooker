@@ -17,3 +17,11 @@ class FacebookPost(scrapy.Item):
     date = scrapy.Field()
     shares_number = scrapy.Field()
     url = scrapy.Field()
+
+
+class FacebookPhoto(scrapy.Item):
+    username = scrapy.Field()
+    url = scrapy.Field()
+    date = scrapy.Field()
+    timestamp = scrapy.Field()
+    image_url = scrapy.Field()
