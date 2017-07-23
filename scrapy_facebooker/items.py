@@ -25,3 +25,12 @@ class FacebookPhoto(scrapy.Item):
     date = scrapy.Field()
     timestamp = scrapy.Field()
     image_url = scrapy.Field()
+
+
+class FacebookEvent(scrapy.Item):
+    date = scrapy.Field()
+    summary_date = scrapy.Field()
+    summary_place = scrapy.Field()
+    title = scrapy.Field()
+    username = scrapy.Field()
+    url = scrapy.Field()
