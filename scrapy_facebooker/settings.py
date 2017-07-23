@@ -21,6 +21,8 @@ USER_AGENT = 'Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+IMAGES_STORE = "./downloaded-photos"
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -64,9 +66,9 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scrapy_facebooker.pipelines.ScrapyFacebookerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'scrapy_facebooker.pipelines.FacebookPhotoPipeline': 10,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
