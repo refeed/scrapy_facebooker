@@ -9,7 +9,7 @@ from scrapy_facebooker.items import FacebookPost
 from urllib.parse import urlencode, urljoin, unquote
 
 
-class FacebookPhotoSpider(scrapy.Spider):
+class FacebookPostSpider(scrapy.Spider):
     name = 'facebook_post'
     start_urls = (
         'https://m.facebook.com/',
