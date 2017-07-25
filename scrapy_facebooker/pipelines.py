@@ -16,7 +16,9 @@ class ScrapyFacebookerPipeline(object):
 class FacebookPhotoPipeline(ImagesPipeline):
 
     def get_media_requests(self, item, info):
-        yield Request(item['image_url'], meta=dict(fb_url=item['url']))
+        image_url = item.get('image_url')
+        if image_url:
+            yield Request(image_url, meta=dict(fb_url=item['url']))
 
     def get_images(self, response, request, info):
         for path, image, buf, in super(FacebookPhotoPipeline, self).get_images(
