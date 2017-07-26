@@ -34,3 +34,9 @@ class FacebookEvent(scrapy.Item):
     title = scrapy.Field()
     username = scrapy.Field()
     url = scrapy.Field()
+
+
+class FacebookVideo(scrapy.Item):
+    timestamp = scrapy.Field()
+    date = scrapy.Field()
+    fb_video_url = scrapy.Field()

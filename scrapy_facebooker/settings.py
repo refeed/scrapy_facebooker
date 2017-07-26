@@ -68,6 +68,7 @@ IMAGES_STORE = "./downloaded-photos"
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'scrapy_facebooker.pipelines.FacebookPhotoPipeline': 10,
+   'scrapy_facebooker.pipelines.FacebookVideoPipeline': 11,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
