@@ -3,7 +3,7 @@ import scrapy
 
 from bs4 import BeautifulSoup
 from collections import OrderedDict
-from scrapy_facebooker.faceblib.faceblib import get_real_external_link
+from scrapy_facebooker.faceblib.url import get_real_external_link
 from html import unescape
 from scrapy_facebooker.items import FacebookPost
 from urllib.parse import urlencode, urljoin, unquote
