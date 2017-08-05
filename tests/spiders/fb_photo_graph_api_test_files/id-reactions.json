@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "id": "61",
+            "name": "Irvan",
+            "type": "LIKE"
+        },
+        {
+            "id": "62",
+            "name": "Raymond",
+            "type": "WOW"
+        },
+        {
+            "id": "63",
+            "name": "Ida",
+            "type": "HAHA"
+        }
+    ],
+    "paging": {
+        "cursors": {
+            "before": "beforeCursor",
+            "after": "afterCursor"
+        }
+    }
+}

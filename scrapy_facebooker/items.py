@@ -34,3 +34,15 @@ class FacebookEvent(scrapy.Item):
     title = scrapy.Field()
     username = scrapy.Field()
     url = scrapy.Field()
+
+
+class FacebookPhotoGraph(scrapy.Item):
+    fb_id = scrapy.Field()
+    created_time = scrapy.Field()
+    url = scrapy.Field()
+    name = scrapy.Field()
+    comments = scrapy.Field()
+    comments_num = scrapy.Field()
+    reactions = scrapy.Field()
+    reactions_num = scrapy.Field()
+    image_url = scrapy.Field()
