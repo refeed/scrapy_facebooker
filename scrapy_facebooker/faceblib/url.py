@@ -26,3 +26,17 @@ def get_facebook_url_from_username(username):
     """
     return '{base_url}/{username}'.format(base_url=FACEBOOK_MOBILE_BASE_URL,
                                           username=username)
+
+
+def create_facebook_photo_url_from_photo_id(photo_id, username):
+    """
+    Create a Facebook url from photo id and the username that owns the photo
+    id.
+
+    :param photo_id: ID of the photo.
+    :param username: The username that owns the photo id.
+    """
+    return '{base_url}/{username}/photos/{id}'.format(
+        base_url=FACEBOOK_MOBILE_BASE_URL,
+        username=username,
+        id=photo_id)
