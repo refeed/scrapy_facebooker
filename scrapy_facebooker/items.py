@@ -46,3 +46,15 @@ class FacebookPhotoGraph(scrapy.Item):
     reactions = scrapy.Field()
     reactions_num = scrapy.Field()
     image_url = scrapy.Field()
+
+
+class FacebookPostGraph(scrapy.Item):
+    fb_id = scrapy.Field()
+    url = scrapy.Field()
+    created_time = scrapy.Field()
+    story = scrapy.Field()
+    message = scrapy.Field()
+    comments = scrapy.Field()
+    comments_num = scrapy.Field()
+    reactions = scrapy.Field()
+    reactions_num = scrapy.Field()
