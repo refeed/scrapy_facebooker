@@ -1,5 +1,7 @@
 # scrapy_facebooker
 
+[![Build Status](https://travis-ci.org/refeed/scrapy_facebooker.svg?branch=master)](https://travis-ci.org/refeed/scrapy_facebooker)
+
 `scrapy_facebooker` is a collection of scrapy spiders which can scrape
 posts, images, and so on from public Faceook Pages.
 
