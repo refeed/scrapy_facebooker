@@ -58,3 +58,15 @@ class FacebookPostGraph(scrapy.Item):
     comments_num = scrapy.Field()
     reactions = scrapy.Field()
     reactions_num = scrapy.Field()
+
+
+class FacebookEventGraph(scrapy.Item):
+    fb_id = scrapy.Field()
+    url = scrapy.Field()
+    start_time = scrapy.Field()
+    end_time = scrapy.Field()
+    name = scrapy.Field()
+    place = scrapy.Field()
+    description = scrapy.Field()
+    comments = scrapy.Field()
+    comments_num = scrapy.Field()
