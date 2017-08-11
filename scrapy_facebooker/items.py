@@ -70,3 +70,14 @@ class FacebookEventGraph(scrapy.Item):
     description = scrapy.Field()
     comments = scrapy.Field()
     comments_num = scrapy.Field()
+
+
+class FacebookVideoGraph(scrapy.Item):
+    fb_id = scrapy.Field()
+    description = scrapy.Field()
+    comments = scrapy.Field()
+    comments_num = scrapy.Field()
+    reactions = scrapy.Field()
+    reactions_num = scrapy.Field()
+    fb_video_url = scrapy.Field()
+    updated_time = scrapy.Field()

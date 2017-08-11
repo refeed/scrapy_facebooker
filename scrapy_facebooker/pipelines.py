@@ -6,6 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from scrapy.contrib.pipeline.images import ImagesPipeline
 from scrapy.http import Request
+from youtube_dl import YoutubeDL
 
 
 class ScrapyFacebookerPipeline(object):
@@ -33,3 +34,14 @@ class FacebookPhotoPipeline(ImagesPipeline):
         new_path_chars = list(fb_url[23:])
         new_path_chars[-1:] = '.jpg'
         return ''.join(new_path_chars)
+
+
+class FacebookVideoPipeline(object):
+
+    def process_item(self, item, spider):
+        fb_video_url = item.get('fb_video_url')
+        if fb_video_url:
+            ydl = YoutubeDL()
+            ydl.add_default_info_extractors()
+            ydl.extract_info(fb_video_url)
+        return item
