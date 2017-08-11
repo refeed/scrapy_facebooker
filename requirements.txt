@@ -2,3 +2,4 @@ Scrapy==1.4.0
 beautifulsoup4==4.6.0
 facebook-sdk==2.0.0
 Pillow==4.2.1
+youtube-dl==2017.7.23
